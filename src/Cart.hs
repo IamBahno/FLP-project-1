@@ -4,9 +4,10 @@ import Data.Char (isSpace)
 import Data.List.Split (splitOn)
 import Data.List (partition,elemIndex)
 import Data.Maybe (fromJust)
+import Debug.Trace (trace)
 
 
-import Tree(TreeNode(EmptyTree))
+import Tree(TreeNode(EmptyTree,Node,Leaf))
 
 data DataWithLabel = DataWithLabel String [Float] deriving (Show)
 -- it holds the data in list, number of classes, number of samples, and list of pairs (class:nSamples)
@@ -44,14 +45,18 @@ createDataset dataList =
 convertToFloats :: [Int] -> [Float]
 convertToFloats xs = map fromIntegral xs
 
+-- gini impurity of dataset
 giniImpurity :: Dataset -> Float
 giniImpurity (Dataset _ _ nSamples classCounts) =
-    -- pull out class counts into a list and make them floats
-    let floatCounts = convertToFloats $ map snd classCounts
-    -- Compute probabilities of classes, raise them to second power and sum them, substract them from one
-        giniSum = sum $ map (\x -> (x / fromIntegral nSamples) ** 2) floatCounts
-    -- todo, implement some more efficent way
-    in 1 - giniSum
+    if (nSamples == 0 || classCounts == [])
+        then 1
+    else
+        -- pull out class counts into a list and make them floats
+        let floatCounts = convertToFloats $ map snd classCounts
+        -- Compute probabilities of classes, raise them to second power and sum them, substract them from one
+            giniSum = sum $ map (\x -> (x / fromIntegral nSamples) ** 2) floatCounts
+        in (1 - giniSum)
+
 
 -- returns value at given index
 getValue :: DataWithLabel -> Int -> Float 
@@ -59,6 +64,14 @@ getValue (DataWithLabel _ values) index = values !! index
 
 getNSamples :: Dataset -> Int
 getNSamples (Dataset _ _ nSamples _) = nSamples
+
+getNClasses :: Dataset -> Int
+getNClasses (Dataset _ nClasses _ _) = nClasses
+
+-- if there is only one class left in dataset
+getClassFromDataset :: Dataset -> String
+getClassFromDataset (Dataset (DataWithLabel className _ : _) _ _ _) = className
+-- getClassFromDataset _ = error "Dataset is empty"
 
 getData :: Dataset ->  [DataWithLabel]
 getData (Dataset listOfLabeledData _ _ _) = listOfLabeledData
@@ -100,9 +113,22 @@ findBestSplitPoint splitPoints dataset  =
     in fromJust $ elemIndex minValue splitPointsEvaluations
 
 trainTree :: Dataset -> TreeNode
-trainTree dataset = 
+trainTree dataset =
     -- get lists of split points, and concatenated them
     let possibleSplitPoints = concat $ map getSplitPoints $ getData dataset
-        indexOfBestSplit = findBestSplitPoint possibleSplitPoints 
-    -- TODO (index should be finished, but is not tested yet)
-    in EmptyTree
+        indexOfBestSplit = findBestSplitPoint possibleSplitPoints dataset
+        -- retrieve the best split point
+        SplitPoint attributeIndex value = possibleSplitPoints !! indexOfBestSplit 
+        -- actually split the dataset by the best splitpoint
+        (subset1,subset2) = splitDataSet dataset $ SplitPoint attributeIndex value
+        -- chose child nodes
+        -- either Leaf, or train the child on the subset
+        leftChild =
+            if (getNClasses subset1) == 1
+            then  Leaf $ getClassFromDataset subset1
+            else  trainTree subset1
+        rightChild =
+            if (getNClasses subset2) == 1
+            then Leaf $ getClassFromDataset subset2
+            else  trainTree subset2
+    in Node attributeIndex value leftChild rightChild

@@ -2,10 +2,19 @@ module Tree where
 
 --  data type for storing the tree
 data TreeNode = Node Int Float TreeNode TreeNode 
-                | Leaf String 
+                |Leaf String 
                 |EmptyTree 
-                |TmpNode Int Float   -- repres node which doest have assigned children yet, used while parsing the input
-                deriving (Show)
+                |TmpNode Int Float   -- represent node which doest have assigned children yet, used while parsing the input
+
+-- custom show for TreeNode
+instance Show TreeNode where
+    show tree = showTree tree 0
+
+-- returns string of tree in format in which it should be printed
+showTree :: TreeNode -> Int -> String
+showTree (Node index value leftChild rightChild) depth = 
+    replicate (depth * 2) ' ' ++ "Node: " ++ show index ++ ", " ++ show value ++ "\n" ++ showTree leftChild (depth + 1) ++ showTree rightChild (depth + 1)
+showTree (Leaf label) depth  = replicate (depth * 2) ' ' ++ "Leaf: " ++ label ++ "\n"
 
 
 -- takes list of Leafs and TmpNodes and returns tree and unused rest of list

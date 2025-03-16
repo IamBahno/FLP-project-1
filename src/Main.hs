@@ -28,9 +28,8 @@ main = do
             -- read in dataset
             dataLines <- readInFile trainingDataFile
             let dataset = parseDataset dataLines
-            let gini = giniImpurity dataset
-            print dataset
-            print gini
+            let tree = trainTree dataset
+            print tree
             return ()
 
         -- if the parameters are not correct
