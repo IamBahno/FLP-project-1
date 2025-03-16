@@ -7,8 +7,6 @@ data TreeNode = Node Int Float TreeNode TreeNode
                 |TmpNode Int Float   -- repres node which doest have assigned children yet, used while parsing the input
                 deriving (Show)
 
-data DataWithLabel = String [Float] deriving (Show)
-
 
 -- takes list of Leafs and TmpNodes and returns tree and unused rest of list
 buildTree::[TreeNode] -> (TreeNode,[TreeNode])

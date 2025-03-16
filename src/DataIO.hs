@@ -19,7 +19,7 @@ readData file = do
     return datas
 
 -- Takes in path to a file and returns list of lines
-readInTree :: String -> IO [String]
-readInTree file = do
+readInFile :: String -> IO [String]
+readInFile file = do
     wholeFile <- readFile file -- read in file
     return (lines wholeFile) -- split file into a list line by line

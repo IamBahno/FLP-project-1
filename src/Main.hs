@@ -3,7 +3,7 @@ import System.Environment (getArgs)
 import DataIO
 import Tree
 import Classification
-
+import Cart
 
 -- main
 main :: IO ()
@@ -12,7 +12,7 @@ main = do
     case args of
         ["-1", treeFile, dataFile] -> do
             -- read in tree
-            treeLines <- readInTree treeFile
+            treeLines <- readInFile treeFile
             let tree = constuctTreeFromLines treeLines -- construct tree
 
             -- read in data
@@ -25,8 +25,12 @@ main = do
 
             
         ["-2", trainingDataFile] -> do
-            -- read in data
-            -- dataPoints <- readDataset trainingDataFile
+            -- read in dataset
+            dataLines <- readInFile trainingDataFile
+            let dataset = parseDataset dataLines
+            let gini = giniImpurity dataset
+            print dataset
+            print gini
             return ()
 
         -- if the parameters are not correct
