@@ -43,3 +43,4 @@ source venv/bin/activate
 pip install pandas scikit-learn termcolor tqdm
 
 python test_flp.py --test_type b
+flags: prvni cast "i", druha "t" nebo oba b (default)
