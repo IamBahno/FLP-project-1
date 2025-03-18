@@ -123,7 +123,7 @@ evalSplitPoint dataset splitPoint =
 
 -- Finds and returns index of best split point
 findBestSplitPoint :: [SplitPoint] -> Dataset -> Int
-indBestSplitPoint [] _ = error "Error: No split points given"
+findBestSplitPoint [] _ = error "Error: No split points given"
 findBestSplitPoint splitPoints dataset  =
     --eval the splitpoints
     let splitPointsEvaluations = map (\x -> evalSplitPoint dataset x) splitPoints
@@ -147,5 +147,5 @@ trainTree dataset =
             -- actually split the dataset by the best splitpoint
             (subset1,subset2) = splitDataSet dataset $ SplitPoint attributeIndex value
 
-        in Node attributeIndex value (trainTree subset1) trainTree subset2
+        in Node attributeIndex value (trainTree subset1) (trainTree subset2)
 
