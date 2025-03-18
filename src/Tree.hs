@@ -10,12 +10,15 @@ data TreeNode = Node Int Float TreeNode TreeNode
 instance Show TreeNode where
     show tree = showTree tree 0
 
+
+
 -- returns string of tree in format in which it should be printed
 showTree :: TreeNode -> Int -> String
 showTree (Node index value leftChild rightChild) depth = 
     replicate (depth * 2) ' ' ++ "Node: " ++ show index ++ ", " ++ show value ++ "\n" ++ showTree leftChild (depth + 1) ++ showTree rightChild (depth + 1)
 showTree (Leaf label) depth  = replicate (depth * 2) ' ' ++ "Leaf: " ++ label ++ "\n"
-
+showTree EmptyTree depth = replicate (depth * 2) ' ' ++ "EmptyTree\n"
+showTree (TmpNode index value) depth = replicate (depth * 2) ' ' ++ "TmpNode: " ++ show index ++ ", " ++ show value ++ "\n" 
 
 -- takes list of Leafs and TmpNodes and returns tree and unused rest of list
 buildTree::[TreeNode] -> (TreeNode,[TreeNode])

@@ -1,9 +1,11 @@
 module Main where
 import System.Environment (getArgs)
-import DataIO
-import Tree
-import Classification
-import Cart
+
+
+import DataIO(readInFile,readData)
+import Tree(constuctTreeFromLines)
+import Classification(classifyDatas)
+import Cart(parseDataset,trainTree)
 
 -- main
 main :: IO ()

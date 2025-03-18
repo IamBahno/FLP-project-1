@@ -4,6 +4,7 @@ build:
 	ghc src/*.hs -o flp-fun -Wall
 
 build-merlin:
+	rm -rf ./libs
 	mkdir -p ./libs
 	ln -s $(merlin_libncursesw_path) ./libs/libncursesw.so.5
 	LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):./libs make build
@@ -11,3 +12,4 @@ build-merlin:
 
 clean:
 	rm -rf ./libs
+	rm -f src/*.hi src/*.o

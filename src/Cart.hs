@@ -1,13 +1,13 @@
 module Cart where
+
 import Data.Map (fromListWith, toList)
 import Data.Char (isSpace)
 import Data.List.Split (splitOn)
 import Data.List (partition,elemIndex)
 import Data.Maybe (fromJust)
-import Debug.Trace (trace)
 
+import Tree(TreeNode(Node,Leaf))
 
-import Tree(TreeNode(EmptyTree,Node,Leaf))
 
 data DataWithLabel = DataWithLabel String [Float] deriving (Show)
 -- it holds the data in list, number of classes, number of samples, and list of pairs (class:nSamples)
@@ -15,6 +15,7 @@ data Dataset = Dataset [DataWithLabel] Int Int [(String,Int)] deriving (Show)
 
 -- index of the attreibute and the value
 data SplitPoint = SplitPoint Int Float deriving (Show)
+
 
 
 parseLabeledDatapoint :: String -> DataWithLabel
@@ -71,7 +72,7 @@ getNClasses (Dataset _ nClasses _ _) = nClasses
 -- if there is only one class left in dataset
 getClassFromDataset :: Dataset -> String
 getClassFromDataset (Dataset (DataWithLabel className _ : _) _ _ _) = className
--- getClassFromDataset _ = error "Dataset is empty"
+getClassFromDataset _ = error "Dataset is empty"
 
 getData :: Dataset ->  [DataWithLabel]
 getData (Dataset listOfLabeledData _ _ _) = listOfLabeledData
@@ -84,7 +85,7 @@ getSplitPoints (DataWithLabel _ values) =map (\(index,value) -> SplitPoint index
 
 -- split dataset by split point into two subsets
 splitDataSet :: Dataset -> SplitPoint -> (Dataset,Dataset)
-splitDataSet (Dataset listOfLabeledData nClasses nSamples classesCounts) (SplitPoint index value) =
+splitDataSet (Dataset listOfLabeledData _ _ _) (SplitPoint index value) =
     -- partition function splits list into two based on condition, here being the value of attribute at given index
     let (smallerDatasWithLabels,biggerDatasWithLabels) = partition (\x-> (getValue x index) <= value ) listOfLabeledData
     in (createDataset smallerDatasWithLabels, createDataset biggerDatasWithLabels)

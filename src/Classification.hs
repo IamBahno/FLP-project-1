@@ -1,5 +1,7 @@
 module Classification where
-import Tree
+
+import Tree(TreeNode(Node,Leaf))
+
 
 -- clasify one data point
 classifyDataPoint :: TreeNode -> [Float] -> String
