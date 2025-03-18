@@ -1,20 +1,28 @@
--- DataIO.hs
+{-
+    Project: FLP Haskell 2025 - CART decision tree
+    login: xbahou00
+    name: Ondřej Bahounek
+    year: 2025
+    description: Functions for reading data from a file.
+-}
+
+
 module DataIO where
 
 import Data.List.Split (splitOn)
 
--- converts strign of comma seperated floats into a list of floats
+-- Converts strings of comma seperated floats into a list of floats
 stringToFloatList :: String -> [Float]
 stringToFloatList line = map (read::String -> Float ) (splitOn "," line)
 
 
 
--- return list of lists of floats, which are datas in each attribute for each data point
+-- Return list of lists of floats, which are datas in each attribute for each data point
 readData :: String -> IO [[Float]]
 readData file = do
     wholeFile <- readFile file
     let linesOfFiles = lines wholeFile
-    -- list of lists of floats
+    -- List of lists of floats
     let datas = map stringToFloatList linesOfFiles 
     return datas
 

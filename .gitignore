@@ -2,3 +2,6 @@ venv/
 libs/
 *.hi
 *.o
+
+flp-fun
+*/flp-fun
