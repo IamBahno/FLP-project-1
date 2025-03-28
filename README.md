@@ -11,10 +11,12 @@ The training algorithm works as follows: after loading the labeled data, I gener
 
 
 #### Building project:
+The whole project was developed and tested on Merlin, using its ghc-7.6.3.
+
 Build on merlin:
-`make` or `make build-merlin`
-on other machines use:
-`make build`
+`make build-merlin`
+on other machines use just:
+`make`
 
 #### First part is loading a tree and classifying data:
 `

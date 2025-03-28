@@ -2,7 +2,7 @@
 merlin_libncursesw_path = /lib/x86_64-linux-gnu/libncursesw.so.6.4
 
 # Default target to build the project
-.DEFAULT_GOAL := build-merlin
+.DEFAULT_GOAL := build
 
 # Default build target
 build:
